@@ -1,0 +1,131 @@
+# =============================================================================
+# Configuração do Pipeline DATASUS
+# =============================================================================
+
+# Configurações gerais do pipeline
+pipeline:
+  name: "Pipeline DATASUS Saúde Pública"
+  version: "1.0.0"
+  description: "Extração e processamento de microdados DATASUS"
+  
+# Período de análise
+periodo:
+  inicio: 2015
+  fim: 2024
+  
+# Diretórios
+diretorios:
+  dados_brutos: "data/raw"
+  dados_processados: "data/processed" 
+  dados_finais: "data/final"
+  logs: "logs"
+  temporarios: "data/temp"
+  
+# Sistemas DATASUS para extração
+sistemas:
+  SIM:
+    ativo: true
+    descricao: "Sistema de Informações sobre Mortalidade"
+    anos: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+    uf: "all"  # ou lista específica: ["SP", "RJ", "MG"]
+    
+  SIH:
+    ativo: true
+    descricao: "Sistema de Informações Hospitalares - Dados Reduzidos"
+    anos: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+    uf: "all"
+    
+  SIA:
+    ativo: true
+    descricao: "Sistema de Informações Ambulatoriais"
+    anos: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+    uf: "all"
+    
+  SINASC:
+    ativo: true
+    descricao: "Sistema de Informações sobre Nascidos Vivos"
+    anos: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+    uf: "all"
+    
+  SINAN:
+    ativo: true
+    descricao: "Sistema de Informação de Agravos de Notificação"
+    anos: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+    uf: "all"
+    agravos:
+      - "DENG"    # Dengue
+      - "ZIKA"    # Zika
+      - "CHIK"    # Chikungunya
+      - "LEIV"    # Leishmaniose Visceral
+      - "TETO"    # Tétano
+      - "TUBE"    # Tuberculose
+      - "HANS"    # Hanseníase
+      - "PFAN"    # Paralisia Flácida Aguda
+      - "MENI"    # Meningite
+      - "FMAC"    # Febre Maculosa
+      
+  CNES:
+    ativo: true
+    descricao: "Cadastro Nacional de Estabelecimentos de Saúde"
+    anos: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+    uf: "all"
+
+# Configurações de processamento
+processamento:
+  paralelismo: true
+  num_cores: 4  # detectar automaticamente se 0
+  chunk_size: 100000
+  
+# Configurações de armazenamento
+armazenamento:
+  formato_saida: "parquet"  # csv, rds, parquet
+  compressao: true
+  backup: true
+  
+# Configurações de log
+log:
+  nivel: "INFO"  # DEBUG, INFO, WARN, ERROR
+  arquivo: "logs/pipeline.log"
+  rotacao: true
+  
+# Configurações de cache
+cache:
+  ativo: true
+  diretorio: "data/cache"
+  tempo_expiracao: 7  # dias
+  
+# Configurações de rede
+rede:
+  timeout: 300  # segundos
+  max_tentativas: 3
+  intervalo_tentativas: 5  # segundos
+  
+# Estados/UFs para processamento (se não for "all")
+ufs:
+  - "AC"  # Acre
+  - "AL"  # Alagoas
+  - "AP"  # Amapá
+  - "AM"  # Amazonas
+  - "BA"  # Bahia
+  - "CE"  # Ceará
+  - "DF"  # Distrito Federal
+  - "ES"  # Espírito Santo
+  - "GO"  # Goiás
+  - "MA"  # Maranhão
+  - "MT"  # Mato Grosso
+  - "MS"  # Mato Grosso do Sul
+  - "MG"  # Minas Gerais
+  - "PA"  # Pará
+  - "PB"  # Paraíba
+  - "PR"  # Paraná
+  - "PE"  # Pernambuco
+  - "PI"  # Piauí
+  - "RJ"  # Rio de Janeiro
+  - "RN"  # Rio Grande do Norte
+  - "RS"  # Rio Grande do Sul
+  - "RO"  # Rondônia
+  - "RR"  # Roraima
+  - "SC"  # Santa Catarina
+  - "SP"  # São Paulo
+  - "SE"  # Sergipe
+  - "TO"  # Tocantins
